@@ -1,0 +1,14 @@
+# rpi_rtos boot config (Pi4, 64-bit bare-metal)
+# start4.elf + fixup4.dat laden unser kernel8.img.
+arm_64bit=1
+kernel=kernel8.img
+
+# --- HDMI Full-HD (1920x1080p60) ---
+# hdmi_safe=1 (erzwang 640x480 DMT) ENTFERNT. Explizit 1080p60 (CEA group1 mode16) + Hotplug + Boost,
+# damit die 1920x1080-Framebuffer-Anforderung des Kernels greift. HDMI0 (nahe USB-C) verwenden.
+# Bei Schwarzbild: hdmi_group=2 + hdmi_mode=82 (DMT 1080p) probieren, oder Rueckfall hdmi_safe=1.
+hdmi_force_hotplug=1
+config_hdmi_boost=4
+hdmi_group=1
+hdmi_mode=16
+disable_overscan=1

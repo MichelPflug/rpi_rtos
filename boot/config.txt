@@ -1,0 +1,35 @@
+# rpi_rtos -- Boot-Konfiguration (Raspberry Pi 4 / BCM2711)
+#
+# Gehoert auf die FAT32-Boot-Partition, zusammen mit der Pi-Firmware
+# (start4.elf, fixup4.dat) und unserem kernel8.img.
+
+# 64-bit-Kernel verwenden.
+arm_64bit=1
+kernel=kernel8.img
+
+# GIC-400 aktivieren: laedt den GIC-faehigen Armstub (armstub8-gic.bin), der den
+# GIC secure konfiguriert (IRQs in Gruppe 1) und Interrupts darueber routet.
+# Erforderlich, damit unsere GIC-/Timer-Treiber auf echter HW funktionieren.
+# (QEMU liest config.txt nicht; dort ist der GIC ohnehin vorhanden.)
+enable_gic=1
+
+# UART aktivieren.
+enable_uart=1
+
+# PL011-Referenztakt fest auf 48 MHz pinnen (passend zu IBRD=26/FBRD=3 im Treiber).
+init_uart_clock=48000000
+
+# PL011 (UART0) auf die Header-Pins GPIO14/15 legen. Ohne dies liegt dort die
+# Mini-UART, waehrend PL011 mit dem On-Board-Bluetooth verbunden ist.
+dtoverlay=disable-bt
+
+# Schnellerer Boot, kein Rainbow-Splash.
+disable_splash=1
+boot_delay=0
+
+# --- HDMI-Bringup (schwarzer Schirm) ---
+# hdmi_safe=1 erzwingt einen maximal kompatiblen HDMI-Modus (640x480 DMT + hdmi_force_hotplug=1 +
+# config_hdmi_boost=4), auch ohne per EDID erkanntes Display. Passt zu unserem 640x480-Framebuffer
+# (Mailbox, Legacy-Grafik -- wir laden KEINEN vc4-kms/fkms-Overlay, daher greift der Mailbox-FB).
+# WICHTIG am Pi4: den HDMI-Port NAHE dem USB-C-Stromanschluss verwenden (HDMI0). Spaeter relaxbar.
+hdmi_safe=1

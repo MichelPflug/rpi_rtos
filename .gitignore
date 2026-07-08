@@ -1,0 +1,5 @@
+# Build artifacts
+*.img
+*.elf
+*.tmp
+*.o
